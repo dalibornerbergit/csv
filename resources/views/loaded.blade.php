@@ -2,13 +2,11 @@
 
 @section('content')
     <div class="container text-center py-4">
-        <h1>CSV</h1>
-        <h4>{{ session('mssg') }}</h4>
 
-        <form method="POST" action="{{ route('load') }}" enctype="multipart/form-data">
+        <form action="{{ route('excel') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <input type="file" name="file">
-            <button class="btn btn-warning" type="submit">Učitaj podatke</button>
+            <input type="file" name="file" value="{{ asset('uploads/podaci - Copy.csv') }}">
+            <button class="btn btn-success">Spremi podatke</button>
         </form>
 
         <table class="table table-dark my-4">
@@ -24,16 +22,16 @@
             <tbody>
                 @foreach ($data as $contact)
                     <tr>
-                        <td>{{ $contact->ime }}</td>
-                        <td>{{ $contact->prezime }}</td>
-                        @if (preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $contact->postanski_br))
+                        <td>{{ $contact[0] }}</td>
+                        <td>{{ $contact[1] }}</td>
+                        @if (preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $contact[2]))
                             <td class="text-danger">
-                                {{ $contact->postanski_br }}</td>
+                                {{ $contact[2] }}</td>
                         @else
-                            <td>{{ $contact->postanski_br }}</td>
+                            <td>{{ $contact[2] }}</td>
                         @endif
-                        <td>{{ $contact->grad }}</td>
-                        <td>{{ $contact->telefon }}</td>
+                        <td>{{ $contact[3] }}</td>
+                        <td>{{ $contact[4] }}</td>
                     </tr>
                 @endforeach
             </tbody>
