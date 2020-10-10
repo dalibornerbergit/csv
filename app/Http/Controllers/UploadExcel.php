@@ -21,23 +21,28 @@ class UploadExcel extends Controller
     public function load(Request $request)
     {
         $file = $request->file;
-        $location = 'uploads';
 
-        $filename = $file->getClientOriginalName();
-        $file->move($location, $filename);
-        $filepath = public_path($location . "/" . $filename);
+        if ($file) {
+            $location = 'uploads';
 
-        $csv = array_map('str_getcsv', file($filepath));
+            $filename = $file->getClientOriginalName();
+            $file->move($location, $filename);
+            $filepath = public_path($location . "/" . $filename);
 
-        $dataArray = array();
+            $csv = array_map('str_getcsv', file($filepath));
 
-        foreach ($csv as $row) {
-            $data = explode(';', $row[0]);
+            $dataArray = array();
 
-            array_push($dataArray, $data);
+            foreach ($csv as $row) {
+                $data = explode(';', $row[0]);
+
+                array_push($dataArray, $data);
+            }
+
+            return view('loaded', ['data' => $dataArray, 'file_path' => $filepath]);
+        } else {
+            return redirect('/')->with('mssg', 'Niste odabrali datoteku.');
         }
-
-        return view('loaded', ['data' => $dataArray]);
     }
 
     public function excel(Request $request)

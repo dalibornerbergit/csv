@@ -7,10 +7,13 @@
 
         <form method="POST" action="{{ route('load') }}" enctype="multipart/form-data">
             @csrf
-            <input type="file" name="file">
+            <input type="file" name="file" accept=".csv">
             <button class="btn btn-warning" type="submit">Učitaj podatke</button>
         </form>
 
+        <hr class="bg-light">
+
+        <p class="text-left">Podaci spremljeni u bazu podataka</p>
         <table class="table table-dark my-4">
             <thead>
                 <tr>
@@ -26,12 +29,7 @@
                     <tr>
                         <td>{{ $contact->ime }}</td>
                         <td>{{ $contact->prezime }}</td>
-                        @if (preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $contact->postanski_br))
-                            <td class="text-danger">
-                                {{ $contact->postanski_br }}</td>
-                        @else
-                            <td>{{ $contact->postanski_br }}</td>
-                        @endif
+                        <td>{{ $contact->postanski_br }}</td>
                         <td>{{ $contact->grad }}</td>
                         <td>{{ $contact->telefon }}</td>
                     </tr>

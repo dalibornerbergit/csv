@@ -2,13 +2,17 @@
 
 @section('content')
     <div class="container text-center py-4">
+        <h1>CSV pregled zapisa</h1>
 
         <form action="{{ route('excel') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <input type="file" name="file" value="{{ asset('uploads/podaci - Copy.csv') }}">
+            <input type="file" name="file" accept=".csv">
             <button class="btn btn-success">Spremi podatke</button>
         </form>
 
+        <hr class="bg-light">
+
+        <p class="text-left"><span class="text-danger">Crvena</span> polja neće biti spremljena</p>
         <table class="table table-dark my-4">
             <thead>
                 <tr>
