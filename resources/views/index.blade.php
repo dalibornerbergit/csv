@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="container text-center py-4">
-        <h1>CSV</h1>
+        <h1>Podaci</h1>
         <h4>{{ session('mssg') }}</h4>
 
-        <form method="POST" action="{{ route('load') }}" enctype="multipart/form-data">
+        {{-- <form method="POST" action="{{ route('load') }}" enctype="multipart/form-data">
             @csrf
             <input type="file" name="file" accept=".csv">
             <button class="btn btn-warning" type="submit">Učitaj podatke</button>
-        </form>
+        </form> --}}
 
         <br>
 
@@ -38,6 +38,10 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="d-flex justify-content-center">
+            {{ $data->links('pagination::bootstrap-4') }}
+        </div>
     </div>
 
 @endsection

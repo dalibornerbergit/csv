@@ -14,12 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('welcome');
 });
 
-Route::get('/', 'App\Http\Controllers\UploadExcel@index');
-Route::get('/loaded', function() {
-    return view('loaded');
-});
+Route::get('/contacts', 'App\Http\Controllers\UploadExcel@index')->name('contacts');
 Route::post('/csvToArray', 'App\Http\Controllers\UploadExcel@load')->name('load');
 Route::post('/excelSubmit', 'App\Http\Controllers\UploadExcel@excel')->name('excel');

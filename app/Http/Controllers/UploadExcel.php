@@ -14,7 +14,7 @@ class UploadExcel extends Controller
 {
     public function index()
     {
-        $data = Podaci::latest()->get();
+        $data = Podaci::latest()->paginate(2);
 
         return view('index', ['data' => $data]);
     }
@@ -23,38 +23,49 @@ class UploadExcel extends Controller
     {
         $file = $request->file;
 
-        if ($file) {
-            $location = 'uploads';
+        if ($request->input('action') == 1) {
 
-            $filename = $file->getClientOriginalName();
-            $file->move($location, $filename);
-            $filepath = public_path($location . "/" . $filename);
+            if ($file) {
+                $location = 'uploads';
 
-            $csv = array_map('str_getcsv', file($filepath));
+                $filename = $file->getClientOriginalName();
+                $file->move($location, $filename);
+                $filepath = public_path($location . "/" . $filename);
 
-            $dataArray = array();
-            $badInputs = array();
+                $csv = array_map('str_getcsv', file($filepath));
 
-            foreach ($csv as $data) {
-                $data = explode(';', $data[0]);
+                $dataArray = array();
+                $badInputs = array();
 
-                $duplicate = DB::table('podaci')
-                    ->where('ime', $data[0])
-                    ->where('prezime', $data[1])
-                    ->where('postanski_br', $data[2])
-                    ->where('grad', $data[3])
-                    ->where('telefon', $data[4])->get();
+                foreach ($csv as $data) {
+                    $data = explode(';', $data[0]);
 
-                if (preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $data[2]) || $duplicate->count() > 0) {
-                    array_push($badInputs, $data);
-                } else {
-                    array_push($dataArray, $data);
+                    $duplicate = DB::table('podaci')
+                        ->where('ime', $data[0])
+                        ->where('prezime', $data[1])
+                        ->where('postanski_br', $data[2])
+                        ->where('grad', $data[3])
+                        ->where('telefon', $data[4])->get();
+
+                    if (preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $data[2]) || $duplicate->count() > 0) {
+                        array_push($badInputs, $data);
+                    } else {
+                        array_push($dataArray, $data);
+                    }
                 }
-            }
 
-            return view('loaded', ['data' => $dataArray, 'bad_inputs' => $badInputs, 'file_path' => $filepath]);
+                return view('loaded', ['data' => $dataArray, 'bad_inputs' => $badInputs]);
+            } else {
+                return redirect('/')->with('badreq', 'Niste odabrali datoteku.');
+            }
         } else {
-            return redirect('/')->with('mssg', 'Niste odabrali datoteku.');
+            if ($file) {
+                Excel::import(new ExcelImport, $file);
+
+                return redirect('/')->with('mssg', 'Podaci spremljeni');
+            } else {
+                return redirect('/')->with('badreq', 'Niste odabrali datoteku.');
+            }
         }
     }
 
@@ -65,9 +76,9 @@ class UploadExcel extends Controller
         if ($file) {
             Excel::import(new ExcelImport, $file);
 
-            return redirect('/')->with('mssg', 'Uspijeh.');
+            return redirect('/')->with('mssg', 'Podaci spremljeni');
         } else {
-            return redirect('/')->with('mssg', 'Niste odabrali datoteku.');
+            return redirect('/')->with('badreq', 'Niste odabrali datoteku.');
         }
     }
 }
