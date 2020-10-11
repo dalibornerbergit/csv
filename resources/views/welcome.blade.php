@@ -17,15 +17,16 @@
 
         <div class="row d-flex justify-content-center">
             <div class="col-lg-5">
-                <div class="card text-white bg-secondary">
-                    <div class="card-header">CSV</div>
+                <div class="card text-white bg-secondary mt-5">
+                    <div class="card-header text-center">
+                        <img src="images/csv.png" width="100" height="100" alt="Card image cap">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">Odaberite CSV datoteku</h5>
-                        <p class="card-text">Nakon odabira, učitajte podatke</p>
 
                         <form method="POST" action="{{ route('load') }}" enctype="multipart/form-data">
                             @csrf
-                            <input type="file" name="file" accept=".csv">
+                            <input required type="file" name="file" accept=".csv">
                             <div class="d-flex justify-content-between mt-3">
                                 <button class="btn btn-warning" name="action" value="1" type="submit">Učitaj
                                     podatke</button>

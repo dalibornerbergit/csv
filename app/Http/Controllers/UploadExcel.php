@@ -26,6 +26,7 @@ class UploadExcel extends Controller
         if ($request->input('action') == 1) {
 
             if ($file) {
+                $counter = 0;
                 $location = 'uploads';
 
                 $filename = $file->getClientOriginalName();
@@ -51,10 +52,11 @@ class UploadExcel extends Controller
                         array_push($badInputs, $data);
                     } else {
                         array_push($dataArray, $data);
+                        $counter++;
                     }
                 }
 
-                return view('loaded', ['data' => $dataArray, 'bad_inputs' => $badInputs]);
+                return view('loaded', ['data' => $dataArray, 'bad_inputs' => $badInputs, 'counter' => $counter]);
             } else {
                 return redirect('/')->with('badreq', 'Niste odabrali datoteku.');
             }
@@ -66,19 +68,6 @@ class UploadExcel extends Controller
             } else {
                 return redirect('/')->with('badreq', 'Niste odabrali datoteku.');
             }
-        }
-    }
-
-    public function excel(Request $request)
-    {
-        $file = $request->file;
-
-        if ($file) {
-            Excel::import(new ExcelImport, $file);
-
-            return redirect('/')->with('mssg', 'Podaci spremljeni');
-        } else {
-            return redirect('/')->with('badreq', 'Niste odabrali datoteku.');
         }
     }
 }

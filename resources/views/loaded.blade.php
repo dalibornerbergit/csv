@@ -1,19 +1,12 @@
 @extends('layouts.layout')
 
 @section('content')
-    <div class="container text-center py-4">
-        <h1>CSV pregled zapisa</h1>
-        <a href="javascript:history.back()" class="btn btn-info">Natrag na spremanje podataka</a>
+    <div class="container py-4">
+        <h3>Pregled podataka</h3>
+        @if ($data)
+            <a href="javascript:history.back()" class="btn btn-warning mb-4">Natrag na spremanje</a>
+        @endif
 
-        {{-- @if ($data)
-            <form action="{{ route('excel') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="file" name="file" accept=".csv">
-                <button class="btn btn-success">Spremi podatke</button>
-            </form>
-        @endif --}}
-
-        <br>
         <hr class="bg-light">
 
         @if (!$data)
@@ -21,6 +14,9 @@
             <a class="text-light" href="/">Natrag</a>
         @else
             <p class="text-left">Podaci koji će biti spremljeni.</p>
+            <div>
+                <span>Broj zapisa koji će biti spremljeni: <b class="text-success">{{$counter}}</b></span>
+            </div>
             <table class="table table-dark my-4">
                 <thead>
                     <tr>

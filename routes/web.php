@@ -18,5 +18,4 @@ Route::get('/', function () {
 });
 
 Route::get('/contacts', 'App\Http\Controllers\UploadExcel@index')->name('contacts');
-Route::post('/csvToArray', 'App\Http\Controllers\UploadExcel@load')->name('load');
-Route::post('/excelSubmit', 'App\Http\Controllers\UploadExcel@excel')->name('excel');
+Route::post('/load', 'App\Http\Controllers\UploadExcel@load')->name('load');

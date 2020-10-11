@@ -15,13 +15,18 @@
 
 <body class="bg-dark text-light">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Zadatak</a>
+        <a class="navbar-brand" href="/">
+            <img src="images/csv.png" width="30" height="30" alt="">
+          </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Početna</a>
+                </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="{{route('contacts')}}">Podaci</a>
                 </li>
@@ -33,7 +38,7 @@
 
     <footer>
         <div class="container text-center p-3">
-            COPYRIGHT ZADATAK 2020
+            <span>DALIBOR NERBER 2020</span>
         </div>
     </footer>
 

@@ -1,17 +1,8 @@
 @extends('layouts.layout')
 
 @section('content')
-    <div class="container text-center py-4">
-        <h1>Podaci</h1>
-        <h4>{{ session('mssg') }}</h4>
-
-        {{-- <form method="POST" action="{{ route('load') }}" enctype="multipart/form-data">
-            @csrf
-            <input type="file" name="file" accept=".csv">
-            <button class="btn btn-warning" type="submit">Učitaj podatke</button>
-        </form> --}}
-
-        <br>
+    <div class="container py-4">
+        <h3>Podaci</h3>
 
         <hr class="bg-light">
 
