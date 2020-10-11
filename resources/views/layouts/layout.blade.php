@@ -14,6 +14,10 @@
 </head>
 
 <body class="bg-dark text-light">
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/">Zadatak</a>
+    </nav>
+
     @yield('content')
 
     <footer>

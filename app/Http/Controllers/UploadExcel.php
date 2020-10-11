@@ -6,6 +6,7 @@ use App\Imports\ExcelImport;
 use App\Models\Podaci;
 use Facade\FlareClient\Stacktrace\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -32,14 +33,26 @@ class UploadExcel extends Controller
             $csv = array_map('str_getcsv', file($filepath));
 
             $dataArray = array();
+            $badInputs = array();
 
-            foreach ($csv as $row) {
-                $data = explode(';', $row[0]);
+            foreach ($csv as $data) {
+                $data = explode(';', $data[0]);
 
-                array_push($dataArray, $data);
+                $duplicate = DB::table('podaci')
+                    ->where('ime', $data[0])
+                    ->where('prezime', $data[1])
+                    ->where('postanski_br', $data[2])
+                    ->where('grad', $data[3])
+                    ->where('telefon', $data[4])->get();
+
+                if (preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $data[2]) || $duplicate->count() > 0) {
+                    array_push($badInputs, $data);
+                } else {
+                    array_push($dataArray, $data);
+                }
             }
 
-            return view('loaded', ['data' => $dataArray, 'file_path' => $filepath]);
+            return view('loaded', ['data' => $dataArray, 'bad_inputs' => $badInputs, 'file_path' => $filepath]);
         } else {
             return redirect('/')->with('mssg', 'Niste odabrali datoteku.');
         }

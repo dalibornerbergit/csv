@@ -11,9 +11,11 @@
             <button class="btn btn-warning" type="submit">Učitaj podatke</button>
         </form>
 
+        <br>
+
         <hr class="bg-light">
 
-        <p class="text-left">Podaci spremljeni u bazu podataka</p>
+        <p class="text-left">Podaci iz baze podataka</p>
         <table class="table table-dark my-4">
             <thead>
                 <tr>
