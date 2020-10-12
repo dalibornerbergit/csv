@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/contacts', 'App\Http\Controllers\UploadExcel@index')->name('contacts');
-Route::post('/load', 'App\Http\Controllers\UploadExcel@load')->name('load');
+// Route::get('/contacts', 'App\Http\Controllers\UploadExcel@index')->name('contacts');
+// Route::post('/load', 'App\Http\Controllers\UploadExcel@load')->name('load');
