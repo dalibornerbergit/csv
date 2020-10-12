@@ -23,51 +23,65 @@ class UploadExcel extends Controller
     {
         $file = $request->file;
 
+        if (!$file)
+            return redirect('/')->with('badreq', 'Došlo je do greške');
+
         if ($request->input('action') == 1) {
 
-            if ($file) {
-                $counter = 0;
-                $location = 'uploads';
+            $counter = 0;
+            $missingField = false;
+            $invalidField = false;
+            $location = 'uploads';
 
-                $filename = $file->getClientOriginalName();
-                $file->move($location, $filename);
-                $filepath = public_path($location . "/" . $filename);
+            $filename = $file->getClientOriginalName();
+            $file->move($location, $filename);
+            $filepath = public_path($location . "/" . $filename);
 
-                $csv = array_map('str_getcsv', file($filepath));
+            $csv = array_map('str_getcsv', file($filepath));
 
-                $dataArray = array();
-                $badInputs = array();
+            $dataArray = array();
+            $badInputs = array();
 
-                foreach ($csv as $data) {
-                    $data = explode(';', $data[0]);
+            foreach ($csv as $data) {
+                $data = explode(';', $data[0]);
 
-                    $duplicate = DB::table('podaci')
-                        ->where('ime', $data[0])
-                        ->where('prezime', $data[1])
-                        ->where('postanski_br', $data[2])
-                        ->where('grad', $data[3])
-                        ->where('telefon', $data[4])->get();
+                if (!$data[0] || !$data[1] || !$data[2] || !$data[3] || !$data[4])
+                    $missingField = true;
 
-                    if (preg_match('/[A-Za-z].*[0-9]|[0-9].*[A-Za-z]/', $data[2]) || $duplicate->count() > 0) {
-                        array_push($badInputs, $data);
-                    } else {
-                        array_push($dataArray, $data);
-                        $counter++;
-                    }
+                if (
+                    preg_match('/[0-9]/', $data[0]) ||
+                    preg_match('/[0-9]/', $data[1]) ||
+                    !preg_match('/^\d+$/', $data[2]) ||
+                    preg_match('/[0-9]/', $data[3]) ||
+                    preg_match('/[a-zA-z]/', $data[4])
+                ) {
+                    $invalidField = true;
                 }
 
-                return view('loaded', ['data' => $dataArray, 'bad_inputs' => $badInputs, 'counter' => $counter]);
-            } else {
-                return redirect('/')->with('badreq', 'Niste odabrali datoteku.');
-            }
-        } else {
-            if ($file) {
-                Excel::import(new ExcelImport, $file);
+                $duplicate = DB::table('podaci')
+                    ->where('ime', $data[0])
+                    ->where('prezime', $data[1])
+                    ->where('postanski_br', $data[2])
+                    ->where('grad', $data[3])
+                    ->where('telefon', $data[4])->get();
 
-                return redirect('/')->with('mssg', 'Podaci spremljeni');
-            } else {
-                return redirect('/')->with('badreq', 'Niste odabrali datoteku.');
+                if ($duplicate->count() > 0 || $invalidField || $missingField) {
+                    array_push($badInputs, $data);
+                    $missingField = false;
+                    $invalidField = false;
+                } else {
+                    array_push($dataArray, $data);
+                    $counter++;
+                }
             }
+
+            return view('loaded', ['data' => $dataArray, 'bad_inputs' => $badInputs, 'counter' => $counter]);
+        } else if ($request->input('action') == 2) {
+            Excel::import(new ExcelImport, $file);
+
+            return redirect('/')->with('mssg', 'Podaci spremljeni');
+        } else {
+            return redirect('/')->with('badreq', 'Došlo je do greške');
         }
     }
 }

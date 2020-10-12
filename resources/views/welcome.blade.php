@@ -38,7 +38,5 @@
                 </div>
             </div>
         </div>
-
-        <p>{{ $data ?? '' }}</p>
     </div>
 @endsection
