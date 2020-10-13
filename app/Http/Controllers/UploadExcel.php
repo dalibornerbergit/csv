@@ -15,14 +15,13 @@ class UploadExcel extends Controller
 {
     public function index()
     {
-        return new Collection(Podaci::paginate(2));
+        return new Collection(Podaci::get());
     }
 
     public function load(Request $request)
     {
         $file = $request->file;
 
-        $counter = 0;
         $missingField = false;
         $invalidField = false;
         $location = 'uploads';
@@ -65,10 +64,16 @@ class UploadExcel extends Controller
                 $invalidField = false;
             } else {
                 array_push($dataArray, $data);
-                $counter++;
             }
         }
 
-        return ['data' => $dataArray, 'bad_inputs' => $badInputs, 'counter' => $counter];
+        return ['data' => $dataArray, 'bad_inputs' => $badInputs];
+    }
+
+    public function store(Request $request)
+    {
+        $file = $request->file;
+
+        Excel::import(new ExcelImport, $file);
     }
 }

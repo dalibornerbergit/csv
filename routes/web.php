@@ -12,10 +12,3 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-// Route::get('/contacts', 'App\Http\Controllers\UploadExcel@index')->name('contacts');
-// Route::post('/load', 'App\Http\Controllers\UploadExcel@load')->name('load');

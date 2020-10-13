@@ -20,3 +20,4 @@ header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token, Origin, Author
 
 Route::get('/data', 'App\Http\Controllers\UploadExcel@index');
 Route::post('/load', 'App\Http\Controllers\UploadExcel@load');
+Route::post('/store', 'App\Http\Controllers\UploadExcel@store');
